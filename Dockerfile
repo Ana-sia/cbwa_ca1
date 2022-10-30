@@ -7,6 +7,9 @@ RUN apk add gcc musl-dev make perl
 RUN wget https://busybox.net/downloads/busybox-1.35.0.tar.bz2 \
   && tar xf busybox-1.35.0.tar.bz2 \
   && mv /busybox-1.35.0 /busybox
+  
+# Create a non-root user to own the files and run our server
+RUN adduser -D static
 
 # Download CA1 from GitHub
 RUN wget https://github.com/Ana-sia/webdev_ca1/archive/main.tar.gz \
@@ -22,9 +25,6 @@ COPY .config .
 
 # Compile and install busybox
 RUN make && make install
-
-# Create a non-root user to own the files and run our server
-RUN adduser -D static
 
 # Switch to the scratch image
 FROM scratch
